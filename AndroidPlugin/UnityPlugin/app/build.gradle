@@ -1,0 +1,42 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "me.devhelp.unityplugin"
+        minSdkVersion 23
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.google.code.gson:gson:2.8.0'
+    provided files('libs/classes.jar')
+}
+
+
+task clearJar(type: Delete) {
+    delete '/AndroidPlugin.jar'
+}
+
+task androidReleaseJar(type: Jar) {
+    from "$buildDir/intermediates/classes/release/"
+    exclude '**/BuildConfig.class'
+    exclude '**/R.class'
+    exclude '**/R$*.class'
+    dependsOn 'assembleRelease'
+}
+
+task makeJar(type: Copy) {
+    from('build/libs/')
+    into("$buildDir")
+    include('app.jar')
+    rename ('app.jar', 'AndroidPlugin.jar')
+}
+
+makeJar.dependsOn(clearJar, build)
+clearJar.dependsOn('androidReleaseJar', build)
