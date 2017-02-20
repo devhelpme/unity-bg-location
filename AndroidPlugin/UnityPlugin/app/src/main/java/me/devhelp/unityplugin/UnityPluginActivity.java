@@ -15,15 +15,16 @@ import java.util.List;
 
 public class UnityPluginActivity extends UnityPlayerActivity {
     private static final int REQUEST_LOCATION = 1;
+    private static final int LOCATION_REQUEST_CODE = 1010;
     public static final String LOG_TAG = "LocationPlugin";
     private Intent locationIntent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(LOG_TAG, "UnityPluginActivity:onCreate");
         locationIntent = new Intent(getApplicationContext(), LocationService.class);
-        setContentView(R.layout.activity_unity_plugin);
     }
 
     @Override
@@ -82,7 +83,7 @@ public class UnityPluginActivity extends UnityPlayerActivity {
 
     private void checkPermissions() {
         if (!hasPermission()) {
-            requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1340);
+            requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
         }
     }
 }
