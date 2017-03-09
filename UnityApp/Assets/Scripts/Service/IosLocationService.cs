@@ -1,24 +1,49 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace Service
 {
 	public class IodLocationService : BgLocationService
 	{
-		public void start () {
-			Debug.Log("Service started");
+		public string getLocations() {
+			Debug.Log("Unity: BackgroundLocationService getLocations");
+			var json = getLocationsJson(0);
+			Debug.Log("Unity: Got json:" + json);
+
+			return json;
 		}
 
-		public void stop () {
-			Debug.Log("Service stop");
+		public void start() {
+			Debug.Log("Unity: BackgroundLocationService start");
+			startLocationService();
 		}
-		public string getLocations(){
-			Debug.Log("Service getLocations");
-			return "";
+
+		public void stop() {
+			Debug.Log("Unity: BackgroundLocationService stop");
+			stopLocationService();
 		}
-		public void deleteOld (long time) {
-			Debug.Log ("Service deleteOld");
+
+		public void deleteOld(long time) {
+			Debug.Log("Unity: BackgroundLocationService stop");
+			deleteLocationsBefore(time);
 		}
+
+
+		[DllImport("__Internal")]
+		extern static private void startLocationService();
+
+		[DllImport("__Internal")]
+		extern static private void stopLocationService();
+
+		[DllImport("__Internal")]
+		extern static private string getLocationsJson(double time);
+
+		[DllImport("__Internal")]
+		extern static private string deleteLocationsBefore(double time);
 	}
 }
 
